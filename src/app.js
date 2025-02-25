@@ -6,27 +6,44 @@ const app = express()
 app.use(express.json())
 
 // mock
-const selecoes =[
+const selecoes = [
     {id: 1, selecao: 'Brasil', grupo: 'G'},
     {id: 2, selecao: 'Suiça', grupo: 'G'},
-    {id: 3, selecao: 'Sérvia', grupo: 'G'},
-    {id: 4, selecao: 'Camarões', grupo: 'G'},
+    {id: 3, selecao: 'Camarões', grupo: 'G'},
+    {id: 4, selecao: 'Sérvia', grupo: 'G'}
 ]
 
+// retornar o obj por id
+function buscarSelecaoPorId (id) {
+    return selecoes.filter( selecao => selecao.id == id )
+}
 
+// pegar a posição ou index do elemento no array por id
+function buscarIndexSelecao (id) {
+    return selecoes.findIndex( selecao => selecao.id == id )
+}
 
 app.get('/', (req,res) =>{
     res.send('Hello Word!')
 })
 
-
 app.get('/selecoes', (req, res) => {
     res.status(200).send(selecoes)
+})
+
+app.get('/selecoes/:id', (req, res) => {
+    res.json(buscarSelecaoPorId(req.params.id))
 })
 
 app.post('/selecoes', (req, res) => {
     selecoes.push(req.body)
     res.status(201).send('Seleção cadastrada com sucesso!')
+})
+
+app.delete('/selecoes/:id', (req, res) => {
+    let index = buscarSelecaoPorId(req.params.id)
+    selecoes.splice(index, 1)
+    res.send(`Selecao excluida com id ${req.params.id} com sucesso!`)
 })
 
 export default app
