@@ -13,6 +13,8 @@ const selecoes =[
     {id: 4, selecao: 'Camarões', grupo: 'G'},
 ]
 
+
+
 app.get('/', (req,res) =>{
     res.send('Hello Word!')
 })
