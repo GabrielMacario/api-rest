@@ -13,11 +13,6 @@ const selecoes = [
     {id: 4, selecao: 'Sérvia', grupo: 'G'}
 ]
 
-// retornar o obj por id
-function buscarSelecaoPorId (id) {
-    return selecoes.filter( selecao => selecao.id == id )
-}
-
 // pegar a posição ou index do elemento no array por id
 function buscarIndexSelecao (id) {
     return selecoes.findIndex( selecao => selecao.id == id )
@@ -41,9 +36,16 @@ app.post('/selecoes', (req, res) => {
 })
 
 app.delete('/selecoes/:id', (req, res) => {
-    let index = buscarSelecaoPorId(req.params.id)
+    let index = buscarIndexSelecao(req.params.id)
     selecoes.splice(index, 1)
     res.send(`Selecao excluida com id ${req.params.id} com sucesso!`)
+})
+
+app.put('/selecoes/:id', (req, res) => {
+    let index = buscarIndexSelecao(req.params.id)
+    selecoes[index].selecao  = req.body.selecao
+    selecoes[index].grupo    = req.body.grupo
+    res.json([selecoes])
 })
 
 export default app
