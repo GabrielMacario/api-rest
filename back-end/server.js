@@ -1,12 +1,11 @@
 import app from "./src/app.js";
-import connection from "./connection/connection.js";
-import dotenv from "dotenv";
+import pool from "./connection/connection.js";
 
-connection.connect((error) => {
+pool.connect((error) => {
   if (error) {
     console.log(`❌ Conexão falhou, error mostrado: ${error}`);
   } else {
-    console.log(`✅ Conectado ao MySQL com ID: ${connection.threadId}`);
+    console.log(`✅ Conectado ao PostgreSQL com ID: ${pool.threadId}`);
 
     app.listen(process.env.PORT, () => {
       console.log(
