@@ -12,4 +12,12 @@ const pool = new Pool({
   database: process.env.DB_NAME,
 });
 
+pool.connect((error) => {
+  if (error) {
+    console.log(`❌ Conexão falhou, error mostrado: ${error}`);
+  } else {
+    console.log(`✅ Conectado ao PostgreSQL`);
+  }
+});
+
 export default pool;

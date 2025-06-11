@@ -1,17 +1,10 @@
 import express from "express";
+import pool from "./connection/connection.js";
 
 const app = express();
 
 // indicar para o express ler body com json
 app.use(express.json());
-
-// mock
-const selecoes = [
-  { id: 1, selecao: "Brasil", grupo: "G" },
-  { id: 2, selecao: "Suiça", grupo: "G" },
-  { id: 3, selecao: "Camarões", grupo: "G" },
-  { id: 4, selecao: "Sérvia", grupo: "G" },
-];
 
 // pegar a posição ou index do elemento no array por id
 function buscarIndexSelecao(id) {
@@ -23,11 +16,30 @@ app.get("/", (req, res) => {
 });
 
 app.get("/selecoes", (req, res) => {
-  res.status(200).send(selecoes);
+  const sql = "select * from selecoes";
+
+  pool.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(404).json({ detalhe: error.message, error });
+    } else {
+      res.status(200).json(result);
+    }
+  });
 });
 
 app.get("/selecoes/:id", (req, res) => {
-  res.json(buscarSelecaoPorId(req.params.id));
+  const id = req.params.id;
+  const sql = "select * from selecoes where id=?";
+
+  pool.query(sql, id, (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(404).json({ detalhe: error.message, error });
+    } else {
+      res.status(200).json(result);
+    }
+  });
 });
 
 app.post("/selecoes", (req, res) => {
