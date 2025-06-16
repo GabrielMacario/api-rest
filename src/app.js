@@ -30,7 +30,7 @@ app.get("/selecoes", (req, res) => {
 
 app.get("/selecoes/:id", (req, res) => {
   const id = req.params.id;
-  const sql = "select * from selecoes where id=?";
+  const sql = "select * from selecoes where id=$1";
 
   pool.query(sql, id, (error, result) => {
     if (error) {
