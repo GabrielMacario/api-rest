@@ -32,19 +32,29 @@ app.get("/selecoes/:id", (req, res) => {
   const id = req.params.id;
   const sql = "select * from selecoes where id=$1";
 
-  pool.query(sql, id, (error, result) => {
+  pool.query(sql, [id], (error, result) => {
     if (error) {
       console.log(error);
       res.status(404).json({ detalhe: error.message, error });
     } else {
-      res.status(200).json(result);
+      res.status(200).json(result.rows[0]);
     }
   });
 });
 
 app.post("/selecoes", (req, res) => {
-  selecoes.push(req.body);
-  res.status(201).send("Seleção cadastrada com sucesso!");
+  const { selecao, grupo } = req.body;
+  const sql =
+    "INSERT INTO selecoes (selecao, grupo) VALUES ($1, $2) RETURNING *";
+
+  pool.query(sql, [selecao, grupo], (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(400).json({ detalhe: error.message, error });
+    } else {
+      res.status(201).json(result);
+    }
+  });
 });
 
 app.delete("/selecoes/:id", (req, res) => {
