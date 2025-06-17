@@ -52,22 +52,56 @@ app.post("/selecoes", (req, res) => {
       console.log(error);
       res.status(400).json({ detalhe: error.message, error });
     } else {
-      res.status(201).json(result);
+      res.status(201).json(result.rows[0]);
     }
   });
 });
 
 app.delete("/selecoes/:id", (req, res) => {
-  let index = buscarIndexSelecao(req.params.id);
-  selecoes.splice(index, 1);
-  res.send(`Selecao excluida com id ${req.params.id} com sucesso!`);
+  const id = req.params.id;
+  const sql = "DELETE FROM selecoes WHERE id = $1";
+
+  pool.query(sql, [id], (error, result) => {
+    if (error) {
+      console.error(error);
+      return res.status(400).json({ detalhe: error.message, error });
+    }
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ mensagem: "Seleção não encontrada." });
+    }
+
+    res
+      .status(200)
+      .json({ mensagem: `Seleção com ID ${id} removida com sucesso!` });
+  });
 });
 
 app.put("/selecoes/:id", (req, res) => {
-  let index = buscarIndexSelecao(req.params.id);
-  selecoes[index].selecao = req.body.selecao;
-  selecoes[index].grupo = req.body.grupo;
-  res.json([selecoes]);
+  const id = req.params.id;
+  const { selecao, grupo } = req.body;
+
+  if (!selecao || !grupo) {
+    return res
+      .status(400)
+      .json({ mensagem: "Campos 'selecao' e 'grupo' são obrigatórios." });
+  }
+
+  const sql =
+    "UPDATE selecoes SET selecao = $1, grupo = $2 WHERE id = $3 RETURNING *";
+
+  pool.query(sql, [selecao, grupo, id], (error, result) => {
+    if (error) {
+      console.error(error);
+      return res.status(400).json({ detalhe: error.message, error });
+    }
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ mensagem: "Seleção não encontrada." });
+    }
+
+    res.status(200).json(result.rows[0]);
+  });
 });
 
 export default app;
