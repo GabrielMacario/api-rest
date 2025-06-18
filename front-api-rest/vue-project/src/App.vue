@@ -1,46 +1,26 @@
-const { createApp } = Vue;
+<template>
+  <div>
+    <header>
+      <button @click="toggleMenu">☰</button>
+      <nav v-if="showMenu">
+        <ul>
+          <li><router-link to="/">Home</router-link></li>
+          <li><router-link to="/todos">Todos</router-link></li>
+        </ul>
+      </nav>
+    </header>
 
-createApp({
-  data() {
-    return {
-      selecoes: [],
-      novaSelecao: {
-        selecao: '',
-        grupo: ''
-      },
-      apiUrl: 'http://localhost:3000/selecoes'
-    };
-  },
-  methods: {
-    async carregarSelecoes() {
-      try {
-        const response = await axios.get(this.apiUrl);
-        this.selecoes = response.data;
-      } catch (err) {
-        console.error(err);
-      }
-    },
-    async adicionarSelecao() {
-      if (!this.novaSelecao.selecao || !this.novaSelecao.grupo) return;
-      try {
-        await axios.post(this.apiUrl, this.novaSelecao);
-        this.novaSelecao.selecao = '';
-        this.novaSelecao.grupo = '';
-        await this.carregarSelecoes();
-      } catch (err) {
-        console.error(err);
-      }
-    },
-    async removerSelecao(id) {
-      try {
-        await axios.delete(`${this.apiUrl}/${id}`);
-        await this.carregarSelecoes();
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  },
-  mounted() {
-    this.carregarSelecoes();
-  }
-}).mount('#app');
+    <main>
+      <router-view />
+    </main>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const showMenu = ref(false);
+const toggleMenu = () => {
+  showMenu.value = !showMenu.value;
+};
+</script>
