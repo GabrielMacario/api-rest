@@ -1,5 +1,5 @@
 import express from "express";
-import selecaoController from "../controllers/selecao.controller.js";
+import selecaoController from "../controllers/selecao-controller.js";
 
 const router = express.Router();
 
