@@ -80,11 +80,11 @@ json
 
 ## 🖥️ Front-end Vue
 
-O diretório `front-api-rest` contem uma página simples em **Vue.js** que consome esta API.
+O diretório `front-api-rest/vue-project` contém uma página simples em **Vue.js** que consome esta API.
 
 ### Como usar
 
 1. Certifique-se de que a API está em execução (`npm run dev`).
-2. Abra o arquivo `front-api-rest/index.html` no navegador.
+2. Abra o arquivo `front-api-rest/vue-project/index.html` no navegador.
 
 A aplicação permite listar, cadastrar e remover seleções.
