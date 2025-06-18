@@ -10,6 +10,18 @@ Esta é uma API simples desenvolvida com **Node.js**, **Express** e **PostgreSQL
 - dotenv
 - pg
 
+## 📁 Estrutura de Pastas
+
+```
+src/
+  config/       # conexão com o banco
+  controllers/  # lógica das rotas
+  services/     # regras de negócio
+  routes/       # definição das rotas
+  app.js        # configuração do Express
+server.js       # ponto de entrada
+```
+
 ## 🚀 Como rodar o projeto
 
 ### 1. Clone o repositório

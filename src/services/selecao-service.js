@@ -1,4 +1,4 @@
-import pool from "../connection/connection.js";
+import pool from "../config/database.js";
 
 class selecaoService {
   hello() {
