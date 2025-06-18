@@ -14,7 +14,6 @@ class selecaoController {
 
   async show(req, res) {
     const id = req.params.id;
-
     try {
       const result = await selecaoService.findById(id);
       res.status(200).json(result);
@@ -24,8 +23,10 @@ class selecaoController {
     }
   }
 
-  store(req, res) {
+  async store(req, res) {
     const { selecao, grupo } = req.body;
+    const result = await selecaoService.create(selecao, grupo);
+    res.send(result);
   }
 
   update(req, res) {

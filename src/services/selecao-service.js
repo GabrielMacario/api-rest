@@ -5,7 +5,21 @@ class selecaoService {
     return "Hello Word!";
   }
 
-  create() {}
+  create(selecao, grupo) {
+    const sql =
+      "INSERT INTO selecoes (selecao, grupo) VALUES ($1, $2) RETURNING *";
+
+    return new Promise((resolve, reject) =>
+      pool.query(sql, [selecao, grupo], (error, result) => {
+        if (error) {
+          console.log(error);
+          return reject({ detalhe: error.message, error });
+        } else {
+          return resolve(result.rows);
+        }
+      })
+    );
+  }
 
   findAll() {
     const sql = "select * from selecoes";
