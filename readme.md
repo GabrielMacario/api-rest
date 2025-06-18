@@ -1,10 +1,4 @@
-Claro! Aqui está o conteúdo completo do README.md em Markdown puro, pronto para copiar e colar:
-
-markdown
-Copiar
-Editar
-
-# 🌍 API Node - Seleções da Copa
+# 🌍 API Node - Rest
 
 Esta é uma API simples desenvolvida com **Node.js**, **Express** e **PostgreSQL**, para gerenciar seleções da Copa do Mundo.
 
@@ -24,16 +18,12 @@ Esta é uma API simples desenvolvida com **Node.js**, **Express** e **PostgreSQL
 git clone https://github.com/seu-usuario/api-node.git
 cd api-node
 2. Instale as dependências
-bash
-Copiar
-Editar
 npm install
 3. Configure o banco de dados
 Certifique-se de que você tem um banco PostgreSQL rodando com uma tabela chamada selecoes:
 
 sql
-Copiar
-Editar
+
 CREATE TABLE selecoes (
   id SERIAL PRIMARY KEY,
   selecao VARCHAR(255) NOT NULL,
@@ -43,8 +33,7 @@ CREATE TABLE selecoes (
 Crie um arquivo .env na raiz do projeto com o seguinte conteúdo:
 
 env
-Copiar
-Editar
+
 DB_USER=admin
 DB_PASS=123456
 DB_NAME=db-cup
@@ -55,8 +44,7 @@ Ajuste os valores conforme sua configuração local.
 
 5. Inicie o servidor
 bash
-Copiar
-Editar
+
 npm run dev
 A API estará disponível em: http://localhost:3000
 
@@ -71,8 +59,7 @@ DELETE	/selecoes/:id	Remove uma seleção
 
 📥 Exemplo de corpo para POST/PUT
 json
-Copiar
-Editar
+
 {
   "selecao": "Brasil",
   "grupo": "G"
