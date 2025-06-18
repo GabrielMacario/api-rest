@@ -82,24 +82,25 @@ class selecaoService {
     });
   }
 
-  delete() {
-    const id = req.params.id;
+  delete(id) {
     const sql = "DELETE FROM selecoes WHERE id = $1";
 
-    pool.query(sql, [id], (error, result) => {
-      if (error) {
-        console.error(error);
-        return res.status(400).json({ detalhe: error.message, error });
-      }
+    return new Promise((resolve, reject) =>
+      pool.query(sql, [id], (error, result) => {
+        if (error) {
+          console.error(error);
+          return reject(new Error({ detalhe: error.message, error }));
+        }
 
-      if (result.rowCount === 0) {
-        return res.status(404).json({ mensagem: "Seleção não encontrada." });
-      }
+        if (result.rowCount === 0) {
+          return reject(new Error({ mensagem: "Seleção não encontrada." }));
+        }
 
-      res
-        .status(200)
-        .json({ mensagem: `Seleção com ID ${id} removida com sucesso!` });
-    });
+        return resolve({
+          mensagem: `Seleção com ID ${id} removida com sucesso!`,
+        });
+      })
+    );
   }
 }
 

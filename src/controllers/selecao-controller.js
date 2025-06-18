@@ -42,24 +42,16 @@ class selecaoController {
     }
   }
 
-  delete(req, res) {
-    const id = req.params.id;
-    const sql = "DELETE FROM selecoes WHERE id = $1";
+  async delete(req, res) {
+    try {
+      const id = req.params.id;
 
-    pool.query(sql, [id], (error, result) => {
-      if (error) {
-        console.error(error);
-        return res.status(400).json({ detalhe: error.message, error });
-      }
-
-      if (result.rowCount === 0) {
-        return res.status(404).json({ mensagem: "Seleção não encontrada." });
-      }
-
-      res
-        .status(200)
-        .json({ mensagem: `Seleção com ID ${id} removida com sucesso!` });
-    });
+      const result = await selecaoService.delete(id);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error(error.message);
+      res.status(400).json({ erro: error.message });
+    }
   }
 }
 
