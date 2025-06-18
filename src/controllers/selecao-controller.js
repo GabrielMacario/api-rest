@@ -1,20 +1,14 @@
 import pool from "../connection/connection.js";
+import selecaoService from "../services/selecao-service.js";
 
 class selecaoController {
   hello(req, res) {
     res.send("Hello Word!");
   }
-  index(req, res) {
-    const sql = "select * from selecoes";
 
-    pool.query(sql, (error, result) => {
-      if (error) {
-        console.log(error);
-        res.status(404).json({ detalhe: error.message, error });
-      } else {
-        res.status(200).json(result);
-      }
-    });
+  async index(req, res) {
+    const result = await selecaoService.findAll();
+    res.json(result);
   }
 
   show(req, res) {
