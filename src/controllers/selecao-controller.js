@@ -1,6 +1,3 @@
-import pool from "../connection/connection.js";
-import selecaoService from "../services/selecao-service.js";
-
 class selecaoController {
   async hello(req, res) {
     const result = await selecaoService.hello();
