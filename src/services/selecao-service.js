@@ -55,21 +55,52 @@ class selecaoService {
     });
   }
 
-  update({ selecao, grupo }) {
-    const sql =
-      "INSERT INTO selecoes (selecao, grupo) VALUES ($1, $2) RETURNING *";
-
-    pool.query(sql, [selecao, grupo], (error, result) => {
-      if (error) {
-        console.log(error);
-        res.status(400).json({ detalhe: error.message, error });
-      } else {
-        res.status(201).json(result.rows[0]);
+  update({ selecao, grupo }, id) {
+    return new Promise((resolve, reject) => {
+      if (!selecao || !grupo) {
+        return reject(
+          new Error("Campos 'selecao' e 'grupo' são obrigatórios.")
+        );
       }
+
+      const sql =
+        "UPDATE selecoes SET selecao = $1, grupo = $2 WHERE id = $3 RETURNING *";
+
+      pool.query(sql, [selecao, grupo, id], (error, result) => {
+        if (error) {
+          return reject(
+            new Error(`Erro ao atualizar seleção: ${error.message}`)
+          );
+        }
+
+        if (result.rowCount === 0) {
+          return reject(new Error("Seleção não encontrada."));
+        }
+
+        resolve(result.rows[0]);
+      });
     });
   }
 
-  delete() {}
+  delete() {
+    const id = req.params.id;
+    const sql = "DELETE FROM selecoes WHERE id = $1";
+
+    pool.query(sql, [id], (error, result) => {
+      if (error) {
+        console.error(error);
+        return res.status(400).json({ detalhe: error.message, error });
+      }
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({ mensagem: "Seleção não encontrada." });
+      }
+
+      res
+        .status(200)
+        .json({ mensagem: `Seleção com ID ${id} removida com sucesso!` });
+    });
+  }
 }
 
 export default new selecaoService();

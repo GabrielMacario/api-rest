@@ -29,31 +29,17 @@ class selecaoController {
     res.send(result);
   }
 
-  update(req, res) {
-    const id = req.params.id;
-    const { selecao, grupo } = req.body;
+  async update(req, res) {
+    try {
+      const id = req.params.id;
+      const { selecao, grupo } = req.body;
 
-    if (!selecao || !grupo) {
-      return res
-        .status(400)
-        .json({ mensagem: "Campos 'selecao' e 'grupo' são obrigatórios." });
+      const result = await selecaoService.update({ selecao, grupo }, id);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error(error.message);
+      res.status(400).json({ erro: error.message });
     }
-
-    const sql =
-      "UPDATE selecoes SET selecao = $1, grupo = $2 WHERE id = $3 RETURNING *";
-
-    pool.query(sql, [selecao, grupo, id], (error, result) => {
-      if (error) {
-        console.error(error);
-        return res.status(400).json({ detalhe: error.message, error });
-      }
-
-      if (result.rowCount === 0) {
-        return res.status(404).json({ mensagem: "Seleção não encontrada." });
-      }
-
-      res.status(200).json(result.rows[0]);
-    });
   }
 
   delete(req, res) {
