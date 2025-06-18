@@ -2,8 +2,9 @@ import pool from "../connection/connection.js";
 import selecaoService from "../services/selecao-service.js";
 
 class selecaoController {
-  hello(req, res) {
-    res.send("Hello Word!");
+  async hello(req, res) {
+    const result = await selecaoService.hello();
+    res.send(result);
   }
 
   async index(req, res) {
@@ -11,33 +12,20 @@ class selecaoController {
     res.json(result);
   }
 
-  show(req, res) {
+  async show(req, res) {
     const id = req.params.id;
-    const sql = "select * from selecoes where id=$1";
 
-    pool.query(sql, [id], (error, result) => {
-      if (error) {
-        console.log(error);
-        res.status(404).json({ detalhe: error.message, error });
-      } else {
-        res.status(200).json(result.rows[0]);
-      }
-    });
+    try {
+      const result = await selecaoService.findById(id);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error(error.message);
+      res.status(404).json({ erro: error.message });
+    }
   }
 
   store(req, res) {
     const { selecao, grupo } = req.body;
-    const sql =
-      "INSERT INTO selecoes (selecao, grupo) VALUES ($1, $2) RETURNING *";
-
-    pool.query(sql, [selecao, grupo], (error, result) => {
-      if (error) {
-        console.log(error);
-        res.status(400).json({ detalhe: error.message, error });
-      } else {
-        res.status(201).json(result.rows[0]);
-      }
-    });
   }
 
   update(req, res) {
