@@ -1,6 +1,6 @@
 # 🌍 API Node - Rest
 
-Esta é uma API simples desenvolvida com **Node.js**, **Express** e **PostgreSQL**, para gerenciar seleções da Copa do Mundo.
+Esta é uma API simples desenvolvida com **Node.js**, **Express** e **PostgreSQL**.
 
 ## 📦 Tecnologias Utilizadas
 
